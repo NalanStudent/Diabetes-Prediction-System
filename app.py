@@ -3,19 +3,26 @@ import numpy as np
 import joblib
 from PIL import Image
 
-# Load model
-model = joblib.load('diabetes_model.pkl')
-
-# Page title
+# Set page layout
 st.set_page_config(page_title="Diabetes Prediction System", layout="wide")
 
 # Layout
-col1, col2 = st.columns([1, 2])
+col1, col2 = st.columns([1, 3])
 
-# Left Column: Inputs and Prediction
+# Left Column: Model selection, Inputs, and Prediction
 with col1:
-    st.header("Enter Patient Information")
+    #st.header("Diabetes Prediction")
 
+    # 🔽 Model selection
+    model_choice = st.selectbox("Select Model", ["Random Forest", "K-Nearest Neighbors"])
+
+    # Load selected model
+    if model_choice == "Random Forest":
+        model = joblib.load("rf_tuned.pkl")
+    elif model_choice == "K-Nearest Neighbors":
+        model = joblib.load("knn_tuned.pkl")
+
+    st.subheader("Enter Patient Information")
     pregnancies = st.number_input('Pregnancies', min_value=0)
     glucose = st.number_input('Glucose', min_value=0)
     blood_pressure = st.number_input('Blood Pressure', min_value=0)
@@ -30,15 +37,14 @@ with col1:
                                 insulin, bmi, dpf, age]])
         prediction = model.predict(input_data)[0]
         if prediction == 1:
-            st.error("The model predicts: DIABETIC")
+            st.error(f"The {model_choice} model predicts: DIABETIC")
         else:
-            st.success("The model predicts: NOT DIABETIC")
+            st.success(f"The {model_choice} model predicts: NOT DIABETIC")
 
-# Right Column: Content and Styling
+# Right Column: Info and Image
 with col2:
     st.title("Diabetes Prediction System")
 
-    # Load and show image
     image = Image.open("images/diabetes.png")
     st.image(image, caption="Predictive Health System", use_column_width=True)
 
@@ -62,15 +68,18 @@ with col2:
     """)
 
     st.subheader("Model Information")
-    st.markdown("""
-    - **Type**: Random Forest  
-    - **Accuracy**: 74.02%
+    st.markdown(f"""
+    - **Type**: KNN
+    - **Accuracy**: 72.72%
+    - **Type**: Random Forest
+    - **Accuracy**: 72.07%
+                
     """)
 
     st.subheader("System By")
     st.markdown("""
     - Nalan  
-    - Teevanraj  
+    - Teevan  
     - Janardhan  
     - Liu
     """)
