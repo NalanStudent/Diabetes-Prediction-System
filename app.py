@@ -7,18 +7,18 @@ from PIL import Image
 st.set_page_config(page_title="Diabetes Prediction System", layout="wide")
 
 # Layout
-col1, col2 = st.columns([1, 3])
+col2, col1 = st.columns([3, 1])
 
 # Left Column: Model selection, Inputs, and Prediction
 with col1:
-    #st.header("Diabetes Prediction")
-
     # 🔽 Model selection
-    model_choice = st.selectbox("Select Model", ["Random Forest", "K-Nearest Neighbors"])
+    model_choice = st.selectbox("Select Model", ["Random Forest" , "Logistic Regression", "K-Nearest Neighbors"])
 
     # Load selected model
     if model_choice == "Random Forest":
         model = joblib.load("rf_tuned.pkl")
+    elif model_choice == "Logistic Regression":
+        model = joblib.load("lr_tuned.pkl")
     elif model_choice == "K-Nearest Neighbors":
         model = joblib.load("knn_tuned.pkl")
 
@@ -43,10 +43,11 @@ with col1:
 
 # Right Column: Info and Image
 with col2:
+    
     st.title("Diabetes Prediction System")
-
-    image = Image.open("images/diabetes.png")
-    st.image(image, caption="Predictive Health System", use_column_width=True)
+    
+    image = Image.open("images/DiabetesPredictionLogo.png")
+    st.image(image, caption="Predictive Health System", use_column_width=500)
 
     st.subheader("System Purpose")
     st.markdown("""
@@ -67,19 +68,18 @@ with col2:
     - **Outcome**: 1 = Diabetic, 0 = Not Diabetic
     """)
 
-    st.subheader("Model Information")
+    st.subheader("Model Information (Accuracy)")
     st.markdown(f"""
-    - **Type**: KNN
-    - **Accuracy**: 72.72%
-    - **Type**: Random Forest
-    - **Accuracy**: 72.07%
-                
+    - **Random Forest** : 77.27%
+    - **Logistic Regression** : 74.68%
+    - **KNN** : 70.13%
+
     """)
 
     st.subheader("System By")
     st.markdown("""
     - Nalan  
-    - Teevan  
+    - Teevanraj  
     - Janardhan  
     - Liu
     """)
